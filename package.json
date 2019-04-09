@@ -1,0 +1,39 @@
+{
+  "name": "Athleets",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "react-native start",
+    "run-ios": "react-native run-ios",
+    "run-android": "react-native run-android",
+    "test": "jest",
+    "lint": "tsc --project tsconfig.json --noEmit && yarn tslint && yarn prettier --list-different",
+    "lint-fix": "yarn tslint --fix; yarn prettier --write",
+    "tslint": "tslint --project tsconfig.json",
+    "prettier": "prettier './**/*.{ts,tsx,css}'"
+  },
+  "dependencies": {
+    "react": "16.8.3",
+    "react-native": "0.59.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/runtime": "^7.4.3",
+    "@types/jest": "^24.0.11",
+    "@types/react": "^16.8.13",
+    "@types/react-native": "^0.57.42",
+    "@types/react-test-renderer": "^16.8.1",
+    "babel-jest": "^24.7.1",
+    "babel-plugin-root-import": "^6.1.0",
+    "jest": "^24.7.1",
+    "metro-react-native-babel-preset": "^0.53.1",
+    "react-test-renderer": "16.8.3",
+    "prettier": "^1.16.4",
+    "tslint": "^5.15.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.4.2"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
