@@ -1,25 +1,47 @@
 import * as React from 'react'
 import { Button, Image, StyleSheet, View } from 'react-native'
 import logo from '~/assets/logo.png'
-// import {getItem, useHttp} from '~/http/HttpProvider'
+import { getItem, HttpProvider, useHttp } from './http/HttpProvider'
 
 const App: React.FunctionComponent = () => {
-  // const [number] = React.useState(0)
+  const { apiCall, useApiCall } = useHttp()
+  const [id, setId] = React.useState('1')
+  const res = useApiCall(getItem(id), [id])
 
-  // const { apiFetch } = useHttp()
-  // const data = useApiFetch(bla(input))
-  // const data = useRequest(data && blub(data))
-  // request(bla(input))
+  // tslint:disable-next-line
+  console.log(res)
 
   return (
-    <View style={styles.container}>
-      <View style={styles.image}>
-        <Image style={{ width: 192, height: 192 }} source={logo} />
+    <HttpProvider>
+      <View style={styles.container}>
+        <View style={styles.image}>
+          <Image style={{ width: 192, height: 192 }} source={logo} />
+        </View>
+        <View style={styles.container}>
+          <View style={styles.button}>
+            <Button title={'Login'} onPress={() => {}} color={'#fff'} />
+          </View>
+          <View style={styles.button}>
+            <Button
+              title={'Fetch'}
+              onPress={async () => {
+                await apiCall(getItem('3'))
+              }}
+              color={'#fff'}
+            />
+          </View>
+          <View style={styles.button}>
+            <Button
+              title={'Set'}
+              onPress={() => {
+                setId('2')
+              }}
+              color={'#fff'}
+            />
+          </View>
+        </View>
       </View>
-      <View style={styles.button}>
-        <Button title={"Login"} onPress={() => {}} color={"#fff"} />
-      </View>
-    </View>
+    </HttpProvider>
   )
 }
 
@@ -34,10 +56,10 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   button: {
     flex: 1,
-    justifyContent: 'center'
-  }
+    justifyContent: 'center',
+  },
 })
