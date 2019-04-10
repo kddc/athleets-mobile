@@ -1,0 +1,17 @@
+for_platform :ios do
+
+  for_lane :beta_version do
+    app_identifier 'gg.athleets.app'
+    apple_id 'jutiemann@googlemail.com'
+    itc_team_id '119166949'
+    team_id 'HMNBGSKU3L'
+  end
+
+  for_lane :beta do
+    app_identifier 'gg.athleets.app'
+    apple_id 'jutiemann@googlemail.com'
+    itc_team_id '119166949'
+    team_id 'HMNBGSKU3L'
+  end
+
+end

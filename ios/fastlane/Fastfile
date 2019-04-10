@@ -1,0 +1,86 @@
+default_platform(:ios)
+
+platform :ios do
+
+  lane :beta_version do
+    APP_ID = "gg.athleets.app"
+    version = File.read('../../version.txt').delete(" \t\r\n")
+    latest = latest_testflight_build_number(
+      app_identifier: APP_ID,
+      version: version
+    )
+    build = latest.to_s === "1" ? "0" : (latest.split(".").last.to_i + 1).to_s
+    build_number = version + "." + build
+    puts "Version Name: " + version
+    puts "Version Code: " + build
+  end
+
+  lane :beta do
+    begin
+      DISPLAY_NAME = "athleets"
+      APP_ID = "gg.athleets.app"
+      PROFILE = "match AppStore gg.athleets.app"
+      SCHEME = "athleets"
+      PROJECT = "athleets.xcodeproj"
+      CONFIGURATION = "Release"
+
+      match(
+        type: "appstore",
+        app_identifier: APP_ID,
+        git_url: "git@github.com:kddc/athleets-certs.git",
+        readonly: true
+      )
+
+      version = File.read('../../version.txt').delete(" \t\r\n")
+      latest = latest_testflight_build_number(
+        app_identifier: APP_ID,
+        version: version
+      )
+      build = latest.to_s === "1" ? "0" : (latest.split(".").last.to_i + 1).to_s
+      build_number = version + "." + build
+
+      puts "Version Name: " + version
+      puts "Version Code: " + build
+
+      update_info_plist(
+        plist_path: "athleets/Info.plist",
+        display_name: DISPLAY_NAME,
+        app_identifier: APP_ID
+      )
+      increment_version_number(
+        xcodeproj: PROJECT,
+        version_number: version
+      )
+      increment_build_number(
+        xcodeproj: PROJECT,
+        build_number: build_number
+      )
+      gym(
+        project: PROJECT,
+        scheme: SCHEME,
+        configuration: CONFIGURATION,
+        xcargs: {
+          :BUNDLE_IDENTIFIER => APP_ID,
+          :PRODUCT_BUNDLE_IDENTIFIER => APP_ID,
+          :PROVISIONING_PROFILE_SPECIFIER => PROFILE,
+        },
+        export_method: "app-store",
+        export_options: {
+          provisioningProfiles: {
+            APP_ID => PROFILE
+          }
+        }
+      )
+      upload_to_testflight(
+        skip_waiting_for_build_processing: true
+      )
+    ensure
+      reset_git_repo(
+        force: true,
+        files: [
+          "."
+        ]
+      )
+    end
+  end
+end
